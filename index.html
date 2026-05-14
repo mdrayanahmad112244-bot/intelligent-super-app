@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 AI Financial SuperApp</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; padding: 20px; }
+        .container { max-width: 500px; margin: 0 auto; }
+        h1 { text-align: center; color: #38bdf8; margin-bottom: 5px; font-size: 24px; }
+        p.subtitle { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 25px; }
+        .nav-tabs { display: flex; justify-content: space-between; margin-bottom: 20px; background: #1e293b; padding: 5px; border-radius: 10px; }
+        .tab-btn { flex: 1; padding: 10px; background: transparent; border: none; color: #94a3b8; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 12px; }
+        .tab-btn.active { background: #38bdf8; color: #0f172a; }
+        .card { background: #1e293b; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 20px; display: none; }
+        .card.active { display: block; }
+        label { display: block; margin-bottom: 8px; color: #94a3b8; font-size: 14px; }
+        input, select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; margin-bottom: 15px; font-size: 16px; }
+        button.btn-run { width: 100%; padding: 14px; background: #38bdf8; border: none; border-radius: 8px; color: #0f172a; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .result-box { margin-top: 20px; padding: 15px; background: #0f172a; border-left: 4px solid #38bdf8; border-radius: 4px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🚀 AI Financial SuperApp</h1>
+    <p class="subtitle">World-Class Speed & Intelligence</p>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab(event, 'stock')">📈 Stock</button>
+        <button class="tab-btn" onclick="switchTab(event, 'roadmap')">💸 Roadmap</button>
+        <button class="tab-btn" onclick="switchTab(event, 'business')">📊 Business</button>
+    </div>
+
+    <!-- 1. Stock Market UI -->
+    <div id="stock-card" class="card active">
+        <label>Enter Stock Symbol (e.g., AAPL, GOOG, TSLA):</label>
+        <input type="text" id="stock-ticker" value="AAPL">
+        <button class="btn-run" onclick="runStock()">Analyze Stock</button>
+        <div id="stock-result" class="result-box"></div>
+    </div>
+
+    <!-- 2. Billionaire Roadmap UI -->
+    <div id="roadmap-card" class="card">
+        <label>Current Savings ($):</label>
+        <input type="number" id="savings" value="0">
+        <label>Monthly Investment ($):</label>
+        <input type="number" id="monthly" value="500">
+        <label>Expected Return Rate (%):</label>
+        <input type="number" id="rate" value="15">
+        <label>Investment Duration (Years):</label>
+        <input type="number" id="years" value="25">
+        <button class="btn-run" onclick="runRoadmap()">Calculate Wealth</button>
+        <div id="roadmap-result" class="result-box"></div>
+    </div>
+
+    <!-- 3. AI Business UI -->
+    <div id="business-card" class="card">
+        <label>Your Raw Business Idea:</label>
+        <input type="text" id="biz-idea" placeholder="e.g., AI clothing brand">
+        <label>Starting Capital ($):</label>
+        <input type="number" id="biz-budget" value="5000">
+        <label>Target Market:</label>
+        <select id="biz-market">
+            <option value="Global">Global</option>
+            <option value="Asia">Asia</option>
+            <option value="Local">Local Country</option>
+        </select>
+        <button class="btn-run" onclick="runBusiness()">Generate Masterplan</button>
+        <div id="business-result" class="result-box"></div>
+    </div>
+</div>
+
+<script>
+    // Cloud API Link (We will update this later with your live backend link)
+    const API_BASE = "http://localhost:8000"; 
+
+    function switchTab(event, tabName) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById(tabName + '-card').classList.add('active');
+    }
+
+    function runStock() {
+        const ticker = document.getElementById('stock-ticker').value;
+        const resBox = document.getElementById('stock-result');
+        resBox.style.display = 'block';
+        resBox.innerHTML = `⏳ Processing ${ticker}...`;
+        
+        fetch(`${API_BASE}/api/stock/${ticker}`)
+            .then(res => res.json())
+            .then(data => {
+                resBox.innerHTML = `<strong>Price:</strong> $${data.current_price}<br><strong>Trend:</strong> ${data.ai_trend_indicator}`;
+            })
+            .catch(err => { resBox.innerHTML = `❌ Error connecting to backend engine!`; });
+    }
+
+    function runRoadmap() {
+        const s = document.getElementById('savings').value;
+        const m = document.getElementById('monthly').value;
+        const r = document.getElementById('rate').value;
+        const y = document.getElementById('years').value;
+        const resBox = document.getElementById('roadmap-result');
+        resBox.style.display = 'block';
+        resBox.innerHTML = `⏳ Computing formula...`;
+        
+        fetch(`${API_BASE}/api/billionaire?savings=${s}&monthly=${m}&rate=${r}&years=${y}`)
+            .then(res => res.json())
+            .then(data => {
+                resBox.innerHTML = `<strong>Total Wealth:</strong> $${data.total_wealth_generated.toLocaleString()}<br><strong>Billionaire Target:</strong> ${data.target_reached ? '🎉 Reached!' : '💡 Need more capital.'}`;
+            })
+            .catch(err => { resBox.innerHTML = `❌ Connection Error!`; });
+    }
+
+    function runBusiness() {
+        const idea = document.getElementById('biz-idea').value;
+        const budget = document.getElementById('biz-budget').value;
+        const market = document.getElementById('biz-market').value;
+        const resBox = document.getElementById('business-result');
+        resBox.style.display = 'block';
+        resBox.innerHTML = `⏳ Generating masterplan...`;
+
+        fetch(`${API_BASE}/api/business-masterplan`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idea: idea, budget: parseFloat(budget), target_market: market })
+        })
+        .then(res => res.json())
+        .then(data => {
+            resBox.innerHTML = `<strong>Year 1 Projected Gross Revenue:</strong> $${data.year_1_gross_revenue_projection.toLocaleString()}<br><strong>Growth Strategy:</strong> ${data.growth_hacking_strategy}`;
+        })
+        .catch(err => { resBox.innerHTML = `❌ AI Engine Offline!`; });
+    }
+</script>
+</body>
+</html>
