@@ -7,8 +7,8 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0f172a; color: #f8fafc; padding: 20px; }
-        .container { max-width: 500px; margin: 0 auto; padding-bottom: 80px; }
-        h1 { text-align: center; color: #38bdf8; margin-bottom: 5px; font-size: 24px; font-weight: 800; }
+        .container { max-width: 500px; margin: 0 auto; }
+        h1 { text-align: center; color: #38bdf8; margin-bottom: 5px; font-size: 24px; }
         p.subtitle { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 25px; }
         .nav-tabs { display: flex; justify-content: space-between; margin-bottom: 20px; background: #1e293b; padding: 5px; border-radius: 10px; }
         .tab-btn { flex: 1; padding: 10px; background: transparent; border: none; color: #94a3b8; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 12px; }
@@ -18,13 +18,7 @@
         label { display: block; margin-bottom: 8px; color: #94a3b8; font-size: 14px; }
         input, select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; margin-bottom: 15px; font-size: 16px; }
         button.btn-run { width: 100%; padding: 14px; background: #38bdf8; border: none; border-radius: 8px; color: #0f172a; font-weight: bold; font-size: 16px; cursor: pointer; }
-        .result-box { margin-top: 20px; padding: 15px; background: #0f172a; border-left: 4px solid #38bdf8; border-radius: 4px; display: none; white-space: pre-line; line-height: 1.5; font-size: 14px; }
-        
-        /* World-Class Fail-Safe AI Interface Container */
-        .chat-popup { display: none; position: fixed; bottom: 85px; right: 20px; width: 350px; height: 480px; background: #1e293b; border: 1px solid #334155; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.6); z-index: 1000; flex-direction: column; overflow: hidden; }
-        .chat-header { background: #38bdf8; color: #0f172a; padding: 14px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; font-size: 15px; }
-        .chat-iframe-container { flex: 1; width: 100%; height: 100%; background: #0f172a; }
-        .chat-trigger { position: fixed; bottom: 20px; right: 20px; background: #38bdf8; color: #0f172a; border: none; width: 55px; height: 55px; border-radius: 50px; font-size: 26px; cursor: pointer; box-shadow: 0 4px 15px rgba(56,189,248,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; }
+        .result-box { margin-top: 20px; padding: 15px; background: #0f172a; border-left: 4px solid #38bdf8; border-radius: 4px; display: none; white-space: pre-line; line-height: 1.6; color: #e2e8f0; }
     </style>
 </head>
 <body>
@@ -33,6 +27,7 @@
     <h1>🚀 AI Financial SuperApp</h1>
     <p class="subtitle">World-Class Speed & Intelligence</p>
 
+    <!-- Navigation Tabs -->
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab(event, 'stock')">📈 Stock</button>
         <button class="tab-btn" onclick="switchTab(event, 'roadmap')">💸 Roadmap</button>
@@ -41,58 +36,33 @@
 
     <!-- 1. Stock Market UI -->
     <div id="stock-card" class="card active">
-        <label>Enter Stock Symbol (e.g., AAPL, GOOG, TSLA):</label>
+        <label>Enter Stock Symbol or Ask Financial Question:</label>
         <input type="text" id="stock-ticker" value="AAPL">
-        <button class="btn-run" onclick="runStock()">Analyze Stock</button>
+        <button class="btn-run" onclick="runAI('stock-ticker', 'stock-result', 'stock analysis')">Analyze with AI</button>
         <div id="stock-result" class="result-box"></div>
     </div>
 
     <!-- 2. Billionaire Roadmap UI -->
     <div id="roadmap-card" class="card">
-        <label>Current Savings ($):</label>
-        <input type="number" id="savings" value="0">
-        <label>Monthly Investment ($):</label>
-        <input type="number" id="monthly" value="500">
-        <label>Expected Return Rate (%):</label>
-        <input type="number" id="rate" value="15">
-        <label>Investment Duration (Years):</label>
-        <input type="number" id="years" value="25">
-        <button class="btn-run" onclick="runRoadmap()">Calculate Wealth</button>
+        <label>Ask Wealth & Investment Questions:</label>
+        <input type="text" id="roadmap-query" placeholder="যেমন: কিভাবে দ্রুত টাকা বাড়ানো যায়?">
+        <button class="btn-run" onclick="runAI('roadmap-query', 'roadmap-result', 'wealth growth strategy')">Calculate Strategy</button>
         <div id="roadmap-result" class="result-box"></div>
     </div>
 
     <!-- 3. AI Business UI -->
     <div id="business-card" class="card">
-        <label>Your Raw Business Idea:</label>
-        <input type="text" id="biz-idea" placeholder="e.g., AI clothing brand">
-        <label>Starting Capital ($):</label>
-        <input type="number" id="biz-budget" value="5000">
-        <label>Target Market:</label>
-        <select id="biz-market">
-            <option value="Global">Global</option>
-            <option value="Asia">Asia</option>
-            <option value="Local Country">Local Country</option>
-        </select>
-        <button class="btn-run" onclick="runBusiness()">Generate Masterplan</button>
+        <label>Your Raw Business Idea or Question:</label>
+        <input type="text" id="biz-idea" placeholder="e.g., AI clothing brand বা যেকোনো প্রশ্ন">
+        <button class="btn-run" onclick="runAI('biz-idea', 'business-result', 'business masterplan')">Generate Masterplan</button>
         <div id="business-result" class="result-box"></div>
     </div>
 </div>
 
-<!-- Floating World No.1 Free AI Assistant Widget -->
-<button class="chat-trigger" onclick="toggleChat()">💬</button>
-
-<div class="chat-popup" id="chatPopup">
-    <div class="chat-header">
-        <span>🤖 World No.1 AI Super Brain</span>
-        <button onclick="toggleChat()" style="background:none; border:none; color:#0f172a; font-weight:bold; font-size: 16px; cursor:pointer;">✕</button>
-    </div>
-    <div class="chat-iframe-container">
-        <!-- Direct Integration of Enterprise-Grade Free AI Interface (No API Keys, No Blockers, Fully Conversational) -->
-        <iframe src="microsoft.com" width="100%" height="100%" style="border: none;" allow="microphone; clipboard-write"></iframe>
-    </div>
-</div>
-
 <script>
+    // এখানে আপনার ফ্রি Gemini API Key-টি বসাতে হবে। নিচে ফ্রি কী পাওয়ার নিয়ম দেওয়া আছে।
+    const GEMINI_API_KEY = "AIzaSyCDCfgNfm9feTdN5GmKx4mGxg7RK4hG2xs"; 
+
     function switchTab(event, tabName) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
@@ -100,66 +70,44 @@
         document.getElementById(tabName + '-card').classList.add('active');
     }
 
-    function runStock() {
-        const ticker = document.getElementById('stock-ticker').value.toUpperCase();
-        const resBox = document.getElementById('stock-result');
-        resBox.style.display = 'block';
-        resBox.innerHTML = `⏳ Processing ${ticker}...`;
+    async function runAI(inputId, resultId, contextType) {
+        const userInput = document.getElementById(inputId).value;
+        const resBox = document.getElementById(resultId);
         
-        setTimeout(() => {
-            const randomPrice = (Math.random() * 200 + 50).toFixed(2);
-            const randomAvg = (parseFloat(randomPrice) * 0.98).toFixed(2);
-            resBox.innerHTML = `<strong>📈 Ticker:</strong> ${ticker}<br><strong>💰 Current Price:</strong> $${randomPrice}<br><strong>📊 30D Average:</strong> $${randomAvg}<br><strong>🤖 AI Indicator:</strong> STRONG BUY (Bullish Trend)`;
-        }, 1000);
-    }
+        if (!userInput.trim()) {
+            alert("অনুগ্রহ করে কিছু লিখুন!");
+            return;
+        }
 
-    function runRoadmap() {
-        const s = parseFloat(document.getElementById('savings').value) || 0;
-        const m = parseFloat(document.getElementById('monthly').value) || 0;
-        const r = parseFloat(document.getElementById('rate').value) / 100 / 12 || 0;
-        const y = parseFloat(document.getElementById('years').value) || 0;
-        const resBox = document.getElementById('roadmap-result');
-        
         resBox.style.display = 'block';
-        resBox.innerHTML = `⏳ Computing formula...`;
-        
-        setTimeout(() => {
-            const months = y * 12;
-            let total = s * Math.pow((1 + r), months);
-            for(let i = 0; i < months; i++) {
-                total += m * Math.pow((1 + r), months - i);
-            }
+        resBox.innerHTML = `⏳ Thinking... Real AI Mind is processing your request...`;
+
+        // এআই-কে ফাইনান্সিয়াল এক্সপার্ট বানানোর প্রম্পট
+        let systemPrompt = `You are the World's No.1 Advanced AI Financial Expert. Answer the user's question accurately in a professional yet friendly tone. If they speak or ask in Bengali, always answer in clear Bengali. Context of inquiry: ${contextType}. Question: ${userInput}`;
+
+        try {
+            const response = await fetch(`googleapis.com{GEMINI_API_KEY}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: systemPrompt }] }]
+                })
+            });
+
+            const data = await response.json();
             
-            const target = 1000000000;
-            const reached = total >= target;
-            const shortfall = reached ? 0 : target - total;
-
-            resBox.innerHTML = `<strong>💸 Projected Wealth:</strong> $${Math.round(total).toLocaleString()}<br><strong>🎉 Billionaire Status:</strong> ${reached ? 'TARGET REACHED!' : 'NOT YET'}<br><strong>💡 Shortfall to $1B:</strong> $${Math.round(shortfall).toLocaleString()}<br><strong>🧠 Tip:</strong> Increase monthly investment or find a higher yield asset class to accelerate growth.`;
-        }, 1000);
-    }
-
-    function runBusiness() {
-        const idea = document.getElementById('biz-idea').value || "Your Business";
-        const budget = parseFloat(document.getElementById('biz-budget').value) || 0;
-        const market = document.getElementById('biz-market').value;
-        const resBox = document.getElementById('business-result');
-        
-        resBox.style.display = 'block';
-        resBox.innerHTML = `⏳ Generating masterplan...`;
-
-        setTimeout(() => {
-            const marketing = budget * 0.35;
-            const ops = budget * 0.45;
-            const buffer = budget * 0.20;
-            const projectedRev = budget * 4.5;
-
-            resBox.innerHTML = `<strong>🎯 Business:</strong> ${idea}<br><strong>🔮 Year 1 Revenue Projection:</strong> $${projectedRev.toLocaleString()}<br><br><strong>💰 Budget Breakdown:</strong><br>- Marketing: $${marketing.toLocaleString()}<br>- Operations: $${ops.toLocaleString()}<br>- Emergency Buffer: $${buffer.toLocaleString()}<br><br><strong>📈 Growth Strategy:</strong> Leverage organic short-form video content to target the ${market} market and maximize ROI.<br><br><strong>⚠️ Execution Steps:</strong>\n1. Launch minimal viable product (MVP) immediately.\n2. Secure initial 100 beta-testers for feedback.\n3. Reinvest 50% of profits back into performance marketing.`;
-        }, 1000);
-    }
-
-    function toggleChat() {
-        const popup = document.getElementById('chatPopup');
-        popup.style.display = (popup.style.display === 'flex') ? 'none' : 'flex';
+            if (data.candidates && data.candidates[0].content.parts[0].text) {
+                let aiResponse = data.candidates[0].content.parts[0].text;
+                // স্টার বা মার্কডাউন চিহ্নগুলো পরিষ্কার করার জন্য
+                aiResponse = aiResponse.replace(/\*\*/g, '').replace(/\*/g, '•');
+                resBox.innerHTML = aiResponse;
+            } else {
+                resBox.innerHTML = `❌ এআই রেসপন্স তৈরি করতে পারেনি। অনুগ্রহ করে এপিআই কী চেক করুন।`;
+            }
+        } catch (error) {
+            resBox.innerHTML = `❌ সার্ভার বা এপিআই কানেকশনে সমস্যা হয়েছে! এপিআই কী ঠিক আছে তো?`;
+            console.error(error);
+        }
     }
 </script>
 </body>
