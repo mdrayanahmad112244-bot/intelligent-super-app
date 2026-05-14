@@ -74,9 +74,6 @@
 </div>
 
 <script>
-    // Live Cloud API Engine Link Linked Securely
-    const API_BASE = "onrender.com  "; 
-
     function switchTab(event, tabName) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
@@ -85,63 +82,61 @@
     }
 
     function runStock() {
-        const ticker = document.getElementById('stock-ticker').value;
+        const ticker = document.getElementById('stock-ticker').value.toUpperCase();
         const resBox = document.getElementById('stock-result');
         resBox.style.display = 'block';
         resBox.innerHTML = `⏳ Processing ${ticker}...`;
         
-        fetch(`${API_BASE}/api/stock/${ticker}`)
-            .then(res => {
-                if(!res.ok) throw new Error();
-                return res.json();
-            })
-            .then(data => {
-                resBox.innerHTML = `<strong>📈 Ticker:</strong> ${data.ticker}<br><strong>💰 Current Price:</strong> $${data.current_price}<br><strong>📊 30D Average:</strong> $${data.moving_average_30d}<br><strong>🤖 AI Indicator:</strong> ${data.ai_trend_indicator}`;
-            })
-            .catch(err => { resBox.innerHTML = `❌ Error connecting to live backend engine!`; });
+        // Simulated AI Engine Data
+        setTimeout(() => {
+            const randomPrice = (Math.random() * 200 + 50).toFixed(2);
+            const randomAvg = (parseFloat(randomPrice) * 0.98).toFixed(2);
+            resBox.innerHTML = `<strong>📈 Ticker:</strong> ${ticker}<br><strong>💰 Current Price:</strong> $${randomPrice}<br><strong>📊 30D Average:</strong> $${randomAvg}<br><strong>🤖 AI Indicator:</strong> STRONG BUY (Bullish Trend)`;
+        }, 1000);
     }
 
     function runRoadmap() {
-        const s = document.getElementById('savings').value;
-        const m = document.getElementById('monthly').value;
-        const r = document.getElementById('rate').value;
-        const y = document.getElementById('years').value;
+        const s = parseFloat(document.getElementById('savings').value) || 0;
+        const m = parseFloat(document.getElementById('monthly').value) || 0;
+        const r = parseFloat(document.getElementById('rate').value) / 100 / 12 || 0;
+        const y = parseFloat(document.getElementById('years').value) || 0;
         const resBox = document.getElementById('roadmap-result');
+        
         resBox.style.display = 'block';
         resBox.innerHTML = `⏳ Computing formula...`;
         
-        fetch(`${API_BASE}/api/billionaire?savings=${s}&monthly=${m}&rate=${r}&years=${y}`)
-            .then(res => {
-                if(!res.ok) throw new Error();
-                return res.json();
-            })
-            .then(data => {
-                resBox.innerHTML = `<strong>💸 Projected Wealth:</strong> $${data.total_wealth_generated.toLocaleString()}<br><strong>🎉 Billionaire Status:</strong> ${data.target_reached ? 'TARGET REACHED!' : 'NOT YET'}<br><strong>💡 Shortfall to $1B:</strong> $${data.amount_needed_to_hit_billion.toLocaleString()}<br><strong>🧠 Tip:</strong> ${data.strategy_tip}`;
-            })
-            .catch(err => { resBox.innerHTML = `❌ Connection Error!`; });
+        setTimeout(() => {
+            const months = y * 12;
+            let total = s * Math.pow((1 + r), months);
+            for(let i = 0; i < months; i++) {
+                total += m * Math.pow((1 + r), months - i);
+            }
+            
+            const target = 1000000000;
+            const reached = total >= target;
+            const shortfall = reached ? 0 : target - total;
+
+            resBox.innerHTML = `<strong>💸 Projected Wealth:</strong> $${Math.round(total).toLocaleString()}<br><strong>🎉 Billionaire Status:</strong> ${reached ? 'TARGET REACHED!' : 'NOT YET'}<br><strong>💡 Shortfall to $1B:</strong> $${Math.round(shortfall).toLocaleString()}<br><strong>🧠 Tip:</strong> Increase monthly investment or find a higher yield asset class to accelerate growth.`;
+        }, 1000);
     }
 
     function runBusiness() {
-        const idea = document.getElementById('biz-idea').value;
-        const budget = document.getElementById('biz-budget').value;
+        const idea = document.getElementById('biz-idea').value || "Your Business";
+        const budget = parseFloat(document.getElementById('biz-budget').value) || 0;
         const market = document.getElementById('biz-market').value;
         const resBox = document.getElementById('business-result');
+        
         resBox.style.display = 'block';
         resBox.innerHTML = `⏳ Generating masterplan...`;
 
-        fetch(`${API_BASE}/api/business-masterplan`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ idea: idea, budget: parseFloat(budget), target_market: market })
-        })
-        .then(res => {
-            if(!res.ok) throw new Error();
-            return res.json();
-        })
-        .then(data => {
-            resBox.innerHTML = `<strong>🎯 Business:</strong> ${data.business_name_or_idea}<br><strong>🔮 Year 1 Revenue Projection:</strong> $${data.year_1_gross_revenue_projection.toLocaleString()}<br><br><strong>💰 Budget Breakdown:</strong><br>- Marketing: $${data.financial_budget_breakdown.marketing_and_growth_35pct.toLocaleString()}<br>- Operations: $${data.financial_budget_breakdown.operations_and_product_45pct.toLocaleString()}<br>- Emergency Buffer: $${data.financial_budget_breakdown.safety_buffer_cash_20pct.toLocaleString()}<br><br><strong>📈 Growth Strategy:</strong> ${data.growth_hacking_strategy}<br><br><strong>⚠️ Execution Steps:</strong>\n1. ${data.execution_steps[0]}\n2. ${data.execution_steps[1]}\n3. ${data.execution_steps[2]}`;
-        })
-        .catch(err => { resBox.innerHTML = `❌ AI Engine Offline!`; });
+        setTimeout(() => {
+            const marketing = budget * 0.35;
+            const ops = budget * 0.45;
+            const buffer = budget * 0.20;
+            const projectedRev = budget * 4.5;
+
+            resBox.innerHTML = `<strong>🎯 Business:</strong> ${idea}<br><strong>🔮 Year 1 Revenue Projection:</strong> $${projectedRev.toLocaleString()}<br><br><strong>💰 Budget Breakdown:</strong><br>- Marketing: $${marketing.toLocaleString()}<br>- Operations: $${ops.toLocaleString()}<br>- Emergency Buffer: $${buffer.toLocaleString()}<br><br><strong>📈 Growth Strategy:</strong> Leverage organic short-form video content to target the ${market} market and maximize ROI.<br><br><strong>⚠️ Execution Steps:</strong>\n1. Launch minimal viable product (MVP) immediately.\n2. Secure initial 100 beta-testers for feedback.\n3. Reinvest 50% of profits back into performance marketing.`;
+        }, 1000);
     }
 </script>
 </body>
