@@ -58,7 +58,7 @@
         .ai-header { display: flex; align-items: center; gap: 8px; color: var(--accent-cyan); font-weight: bold; margin-bottom: 8px; font-size: 14px; }
         .chart-container { position: relative; margin-top: 25px; height: 250px; width: 100%; }
 
-        /* Real Connected ChatGPT-like Engine UI CSS Layout */
+        /* ChatGPT Custom Client CSS Setup Layout */
         .chat-card { background: var(--bg-secondary); border-radius: 20px; padding: 25px; border: 1px solid var(--border-color); margin-top: 30px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); }
         .chat-title { font-size: 18px; color: var(--accent-cyan); font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .chat-box { height: 320px; background: var(--bg-primary); border-radius: 12px; padding: 15px; overflow-y: auto; margin-bottom: 15px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; }
@@ -186,11 +186,11 @@
         </div>
     </div>
 
-    <!-- ChatGPT Style Connected Real-Time Core AI Module UI -->
+    <!-- ChatGPT Real-Time Cloud AI Core Box -->
     <div class="chat-card">
         <div class="chat-title"><i class="fa-solid fa-robot" style="color: var(--accent-green);"></i> Cloud Real AI Agent (ChatGPT Engine)</div>
         <div class="chat-box" id="chatBox">
-            <div class="chat-msg bot">Hello! I am now connected to the real-time Google Gemini Cloud Core. I can process any creative prompt, track conversation memory context, or execute automated structural tab shifts. Try asking me "How are you?" or tell me to "create a master plan"!</div>
+            <div class="chat-msg bot">Hello! I am now connected to your personal Gemini Cloud Core. I can process any creative prompt, track conversation memory context, or execute automated structural tab shifts. Try asking me "How are you?" or tell me to "create a master plan"!</div>
         </div>
         <div class="chat-input-row">
             <input type="text" id="chatInput" placeholder="Ask real AI anything..." onkeypress="if(event.key === 'Enter') Engine.sendChatMessage()">
@@ -214,7 +214,7 @@
     const Engine = (() => {
         let activeCharts = {};
         
-        // Automated Continuous Chat Memory Registry
+        // Continuous History Memory Array Registry
         let chatHistory = [
             { role: "user", parts: [{ text: "You are an incredibly intelligent financial and conversational AI advisor. Answer any type of question (general knowledge, coding, life tips, personal chat) with maximum clarity. Track context variables across conversation history layers perfectly. Respond in the exact native language the user utilizes to message you." }] },
             { role: "model", parts: [{ text: "Understood. I am synced with cloud repositories and ready to engage conversationally in any language chosen by the user." }] }
@@ -338,7 +338,7 @@
                 box.appendChild(botDiv);
                 box.scrollTop = box.scrollHeight;
 
-                // Automation trigger mapping hooks
+                // Tab Trigger Hooks Logic
                 const query = text.toLowerCase();
                 if (query.includes('master plan') || query.includes('business plan') || query.includes('মাস্টার প্ল্যান')) {
                     switchTab(null, 'business');
@@ -351,12 +351,14 @@
                     Engine.processRoadmap();
                 }
 
-                // Add current user turn to runtime array context memory
+                // Add current turn context to runtime memory array
                 chatHistory.push({ role: "user", parts: [{ text: text }] });
 
                 try {
-                    // Fully Corrected Unified Real Endpoint Framework Integration
-                    const apiEndpoint = "https://googleapis.com" + "AIzaSy" + "DE_FY9Vd9B2" + "-O9XoO" + "B1rOms" + "CIsX3N" + "Q0gM";
+                    // ⚠️ এই লেখার জায়গায় আপনার জেনারেট করা কপিড API Key-টি পেস্ট করে দিন ⚠️
+                    const MY_API_KEY = "YOUR_OWN_GEMINI_API_KEY"; 
+                    
+                    const apiEndpoint = `https://googleapis.com{MY_API_KEY}`;
                     
                     const response = await fetch(apiEndpoint, {
                         method: "POST",
@@ -365,9 +367,14 @@
                     });
 
                     const data = await response.json();
+                    
+                    if(data.error) {
+                        throw new Error(data.error.message);
+                    }
+
                     let aiReply = data.candidates[0].content.parts[0].text;
 
-                    // Standard Markdown Markdown Parser Sanitization Filter
+                    // Standard Markdown Parser Sanitization Filter
                     aiReply = aiReply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                     aiReply = aiReply.replace(/\*(.*?)\*/g, '<i>$1</i>');
 
@@ -376,7 +383,7 @@
                     botDiv.innerHTML = aiReply;
 
                 } catch (error) {
-                    botDiv.innerHTML = "Oops.\nPlease make sure the device is connected to the internet and the app is online.";
+                    botDiv.innerHTML = "❌ <strong>AI Key Integration Missing!</strong><br>দয়া করে কোডের ভেতরে <code>YOUR_OWN_GEMINI_API_KEY</code> লেখার জায়গায় আপনার নিজস্ব ফ্রি এআই কি (Key) টি বসিয়ে দিন। ইন্টারনেটের সাথে সংযোগ ১০০% ঠিক আছে।";
                     console.error(error);
                 }
                 box.scrollTop = box.scrollHeight;
