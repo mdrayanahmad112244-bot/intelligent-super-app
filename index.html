@@ -62,11 +62,11 @@
         .ai-header { display: flex; align-items: center; gap: 8px; color: var(--accent-cyan); font-weight: bold; margin-bottom: 8px; font-size: 14px; }
         .chart-container { position: relative; margin-top: 25px; height: 250px; width: 100%; }
 
-        /* Integrated AI Chat Engine UI */
+        /* Integrated ChatGPT-like UI */
         .chat-card { background: var(--bg-secondary); border-radius: 20px; padding: 25px; border: 1px solid var(--border-color); margin-top: 30px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); }
         .chat-title { font-size: 18px; color: var(--accent-cyan); font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .chat-box { height: 250px; background: var(--bg-primary); border-radius: 12px; padding: 15px; overflow-y: auto; margin-bottom: 15px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; }
-        .chat-msg { max-width: 80%; padding: 10px 14px; border-radius: 10px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
+        .chat-box { height: 280px; background: var(--bg-primary); border-radius: 12px; padding: 15px; overflow-y: auto; margin-bottom: 15px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; }
+        .chat-msg { max-width: 85%; padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; word-wrap: break-word; }
         .chat-msg.user { background: var(--accent-cyan); color: var(--bg-primary); font-weight: 600; align-self: flex-end; border-bottom-right-radius: 2px; }
         .chat-msg.bot { background: var(--bg-tertiary); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 2px; }
         .chat-input-row { display: flex; gap: 10px; }
@@ -86,9 +86,9 @@
 
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab(event, 'stock')"><i class="fa-solid fa-chart-line"></i> Stock Analyzer</button>
-        <button class="tab-btn" onclick="switchTab(event, 'roadmap')"><i class="fa-solid fa-money-bill-trend-up"></i> Wealth Roadmap</button>
-        <button class="tab-btn" onclick="switchTab(event, 'business')"><i class="fa-solid fa-business-time"></i> AI Masterplan</button>
+        <button id="tab-btn-stock" class="tab-btn active" onclick="switchTab(event, 'stock')"><i class="fa-solid fa-chart-line"></i> Stock Analyzer</button>
+        <button id="tab-btn-roadmap" class="tab-btn" onclick="switchTab(event, 'roadmap')"><i class="fa-solid fa-money-bill-trend-up"></i> Wealth Roadmap</button>
+        <button id="tab-btn-business" class="tab-btn" onclick="switchTab(event, 'business')"><i class="fa-solid fa-business-time"></i> AI Masterplan</button>
     </div>
 
     <!-- 1. Stock Market UI Panel -->
@@ -190,14 +190,14 @@
         </div>
     </div>
 
-    <!-- Integrated AI Brain Conversational Assistant -->
+    <!-- Integrated ChatGPT-like Dynamic Memory Chat Core -->
     <div class="chat-card">
-        <div class="chat-title"><i class="fa-solid fa-robot" style="color: var(--accent-green);"></i> Advanced AI Financial Assistant (Live Core)</div>
+        <div class="chat-title"><i class="fa-solid fa-robot" style="color: var(--accent-green);"></i> ChatGPT-Style Financial Brain (with Active Memory)</div>
         <div class="chat-box" id="chatBox">
-            <div class="chat-msg bot">Hello! I am your AI Financial SuperApp assistant. Ask me anything about stock market futures, crypto, wealth strategies, or give me a direct command! (বাংলায় প্রশ্ন করতে পারেন)</div>
+            <div class="chat-msg bot">Hello! I am your conversational financial AI. I can save context variables from our history and track your parameters. Ask me any question or tell me to run structural tasks! What project are you working on today?</div>
         </div>
         <div class="chat-input-row">
-            <input type="text" id="chatInput" placeholder="Ask AI... (e.g., 'Stock market future?', 'How to be rich?')" onkeypress="if(event.key === 'Enter') Engine.sendChatMessage()">
+            <input type="text" id="chatInput" placeholder="Message AI Assistant..." onkeypress="if(event.key === 'Enter') Engine.sendChatMessage()">
             <button class="btn-send" onclick="Engine.sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
@@ -207,12 +207,25 @@
     function switchTab(event, tabName) {
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
-        event.currentTarget.classList.add('active');
-        document.getElementById(tabName + '-card').classList.add('active');
+        
+        const targetBtn = document.getElementById('tab-btn-' + tabName);
+        if (targetBtn) targetBtn.classList.add('active');
+        
+        const targetCard = document.getElementById(tabName + '-card');
+        if (targetCard) targetCard.classList.add('active');
     }
 
     const Engine = (() => {
         let activeCharts = {};
+        
+        // ChatGPT style Memory Allocation Matrix
+        let aiMemory = {
+            userName: "",
+            lastTopic: "",
+            lastStockTicker: "TSLA",
+            lastBusinessIdea: "AI Powered Micro-SaaS",
+            chatCount: 0
+        };
 
         const seedRandom = (str) => {
             let hash = 0;
@@ -223,6 +236,7 @@
         return {
             processStock: () => {
                 const ticker = document.getElementById('stock-ticker').value.toUpperCase().trim() || "AAPL";
+                aiMemory.lastStockTicker = ticker;
                 const risk = document.getElementById('stock-risk').value;
                 const resBox = document.getElementById('stock-result');
                 resBox.style.display = 'block';
@@ -299,6 +313,7 @@
 
             processBusiness: () => {
                 const idea = document.getElementById('biz-idea').value || "SaaS Enterprise";
+                aiMemory.lastBusinessIdea = idea;
                 const budget = parseFloat(document.getElementById('biz-budget').value) || 0;
                 const resBox = document.getElementById('business-result');
                 resBox.style.display = 'block';
@@ -316,7 +331,7 @@
 
                 const box = document.getElementById('chatBox');
                 
-                // Render User Bubble
+                // Render User Speech Bubble
                 const userDiv = document.createElement('div');
                 userDiv.className = 'chat-msg user';
                 userDiv.innerText = text;
@@ -325,31 +340,93 @@
                 inputEl.value = '';
                 box.scrollTop = box.scrollHeight;
 
-                // Processing Deterministic Local AI Responses
+                aiMemory.chatCount++;
+
+                // Advanced Memory Context Extractor Engine
                 setTimeout(() => {
                     const botDiv = document.createElement('div');
                     botDiv.className = 'chat-msg bot';
                     
                     const query = text.toLowerCase();
-                    let response = "I have logged your custom command into the matrix core. Let me analyze that for you based on algorithmic financial trends.";
+                    let response = "";
+                    let proactiveQuestion = "";
 
-                    // AI Response Logic Matrix (English & Bangla Smart Fallbacks)
-                    if(query.includes('stock') || query.includes('future') || query.includes('ভবিষ্যৎ') || query.includes('শেয়ার বাজার')) {
-                        response = "📊 **AI Stock Future Forecast:** The stock market is moving towards algorithmic optimization. High-frequency AI tech assets (NVDA, TSLA) are consolidating for a major multi-year macro expansion wave. High volatility expected near resistance, buy dips.";
-                    } else if(query.includes('rich') || query.includes('money') || query.includes('টাকা') || query.includes('ধনী')) {
-                        response = "💸 **AI Wealth Matrix Command:** The fastest algorithmic method to scale capital is automated compounding. Invest at least 25% of your income into high-yield indexing or micro-equity channels while maximizing digital leverage via SaaS structures.";
-                    } else if(query.includes('crypto') || query.includes('bitcoin') || query.includes('ক্রিপ্টো')) {
-                        response = "🪙 **Crypto Intelligence Update:** Bitcoin is holding strong secular liquidity layers. The AI engine flags a long-term bullish accumulation trend. Diversify maximum 5-10% of liquidity into cold-storage digital frameworks.";
-                    } else if(query.includes('hello') || query.includes('hi') || query.includes('কেমন আছো')) {
-                        response = "👋 Hello! I am online. My localized heuristic modules are fully calibrated. Command me to analyze stocks, plan business budgets, or optimize your roadmap goals!";
-                    } else {
-                        response = `🧠 **AI Dynamic Response:** Command executed successfully! Based on local data matrices, your input "${text}" indicates a positive optimization factor. Maintain active tracking across asset parameters for ideal efficiency.`;
+                    // ১. নাম সেভ করার মেমোরি মেকানিজম
+                    if (query.includes('my name is') || query.includes('amar nam') || query.includes('আমার নাম')) {
+                        const words = text.split(' ');
+                        aiMemory.userName = words[words.length - 1];
+                        response = `Nice to meet you, ${aiMemory.userName}! I have saved your profile into my local neural network memory slot.`;
+                        proactiveQuestion = `What type of asset class or business structure should we optimize for your name today?`;
+                    }
+                    // ২. নাম মনে রাখার প্রমাণ
+                    else if (query.includes('what is my name') || query.includes('amar nam ki') || query.includes('আমার নাম কি')) {
+                        if (aiMemory.userName) {
+                            response = `Your name is recorded as **${aiMemory.userName}**. I remember our conversation layers perfectly.`;
+                        } else {
+                            response = "I haven't captured your name yet in this session! What should I call you?";
+                        }
+                        proactiveQuestion = "Shall we design a custom billionaire roadmap under your account?";
+                    }
+                    // ৩. প্রজেক্ট/মাস্টারপ্ল্যান কমান্ড ইন্টারসেপ্টর
+                    else if (query.includes('master plan') || query.includes('business plan') || query.includes('মাস্টার প্ল্যান')) {
+                        switchTab(null, 'business');
+                        Engine.processBusiness();
+                        aiMemory.lastTopic = "Business Masterplan";
+                        response = `🎯 **Command Intercepted:** I have moved your interface to the Business panel and successfully generated a master strategic forecast for your concept **"${aiMemory.lastBusinessIdea}"**.`;
+                        proactiveQuestion = `Does this Year 1 projection look sustainable to you, or should we increase the budget framework?`;
+                    } 
+                    // ৪. স্টক এনালাইসিস কমান্ড ইন্টারসেপ্টর
+                    else if (query.includes('analyze stock') || query.includes('check stock') || query.includes('স্টক অ্যানালাইসিস')) {
+                        switchTab(null, 'stock');
+                        Engine.processStock();
+                        aiMemory.lastTopic = "Stock Asset";
+                        response = `📈 **Command Intercepted:** I have configured the active parameters and generated a linear wave prediction vector for ticker **"${aiMemory.lastStockTicker}"** in the dashboard panel above!`;
+                        proactiveQuestion = `Do you want me to analyze the volatility risk index of this stock or look into another asset?`;
+                    }
+                    // ৫. রোডম্যাপ কমান্ড ইন্টারসেপ্টর
+                    else if (query.includes('roadmap') || query.includes('calculate wealth') || query.includes('রোডম্যাপ')) {
+                        switchTab(null, 'roadmap');
+                        Engine.processRoadmap();
+                        aiMemory.lastTopic = "Billionaire Compound Curve";
+                        response = `💸 **Command Intercepted:** Compiling future compounding metrics. I have parsed your principal and monthly contributions into the exponential growth calculator above.`;
+                        proactiveQuestion = `Are you aiming to cross the $1B threshold earlier, or is this timeline matrix ideal for you?`;
+                    }
+                    // ৬. স্টক মার্কেটের সাধারণ ভবিষ্যৎবাণী
+                    else if (query.includes('stock') || query.includes('future') || query.includes('ভবিষ্যৎ') || query.includes('শেয়ার বাজার')) {
+                        aiMemory.lastTopic = "Stock Strategy";
+                        response = `📊 **AI Forecast Engine Analysis:** The global indexes are preparing for a strong capital rotation into decentralized tech and automation entities. Tickers like **${aiMemory.lastStockTicker}** are capturing significant liquidity support. Long-term forecasting shows a structural breakout trend near standard resistance blocks.`;
+                        proactiveQuestion = `Are you planning a short-term trade or a long-term compound strategy for ${aiMemory.lastStockTicker}?`;
+                    } 
+                    // ৭. টাকা / ধনী হওয়ার উপায়
+                    else if (query.includes('rich') || query.includes('money') || query.includes('টাকা') || query.includes('ধনী')) {
+                        aiMemory.lastTopic = "Wealth Dynamics";
+                        response = "💸 **AI Wealth Compound Paradigm:** True capital velocity is achieved by creating digital scalable systems (SaaS, Content Engines) and funneling the profits directly into high-yield automated stock/equity nodes. This avoids linear input-output traps.";
+                        proactiveQuestion = "How much liquid capital are you looking to allocate into your investments this year?";
+                    } 
+                    // ৮. ক্রিপ্টোকারেন্সি
+                    else if (query.includes('crypto') || query.includes('bitcoin') || query.includes('ক্রিপ্টো')) {
+                        aiMemory.lastTopic = "Alternative Assets";
+                        response = "🪙 **Crypto Network Evaluation:** Bitcoin remains the primary digital anchor against institutional liquidity dilution. The network topology signals a secure holding zone. Maintain a target of 5% to 10% in secure wallets to optimize portfolio resilience.";
+                        proactiveQuestion = "Do you prefer traditional blue-chip stocks or high-volatility digital assets?";
+                    }
+                    // ৯. সাধারণ মেসেজ / গ্রীটিংস
+                    else if (query.includes('hello') || query.includes('hi') || query.includes('কেমন আছো')) {
+                        let nameGreeting = aiMemory.userName ? `, ${aiMemory.userName}` : "";
+                        response = `👋 Hello${nameGreeting}! I am monitoring our chat history. I am ready to calculate roadmap values, generate corporate structures, or predict macro stock futures.`;
+                        proactiveQuestion = `What specific asset parameters or ideas are we evaluating next?`;
+                    } 
+                    // ১০. ফ্যালব্যাক (ডিফল্ট চ্যাটজিপিটি কনটেক্সট উত্তর)
+                    else {
+                        let dynamicContext = aiMemory.lastTopic ? `In regards to our previous evaluation on **${aiMemory.lastTopic}**, ` : "";
+                        response = `🧠 **ChatGPT Memory Core:** ${dynamicContext}I have logged your prompt: "${text}". My data modules analyze this as a valid tactical strategy option for scaling efficiency.`;
+                        proactiveQuestion = `Would you like me to map this idea specifically into an **AI Business Masterplan** or run a **Stock Analysis** matrix for it?`;
                     }
 
-                    botDiv.innerHTML = response;
+                    // Render Bot Output Output with ChatGPT Proactive Proactive Prompting
+                    botDiv.innerHTML = `${response}<br><br><span style="color: var(--accent-green); font-weight: 600;"><i class="fa-solid fa-circle-question"></i> AI Prompt:</span> <i>${proactiveQuestion}</i>`;
                     box.appendChild(botDiv);
                     box.scrollTop = box.scrollHeight;
-                }, 500);
+                }, 400);
             }
         };
     })();
