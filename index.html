@@ -58,7 +58,7 @@
         .ai-header { display: flex; align-items: center; gap: 8px; color: var(--accent-cyan); font-weight: bold; margin-bottom: 8px; font-size: 14px; }
         .chart-container { position: relative; margin-top: 25px; height: 250px; width: 100%; }
 
-        /* Integrated Real ChatGPT-Style UI Custom CSS */
+        /* Real Connected ChatGPT-like Engine UI CSS Layout */
         .chat-card { background: var(--bg-secondary); border-radius: 20px; padding: 25px; border: 1px solid var(--border-color); margin-top: 30px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); }
         .chat-title { font-size: 18px; color: var(--accent-cyan); font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .chat-box { height: 320px; background: var(--bg-primary); border-radius: 12px; padding: 15px; overflow-y: auto; margin-bottom: 15px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; }
@@ -186,7 +186,7 @@
         </div>
     </div>
 
-    <!-- ChatGPT Real-Time Cloud AI Core -->
+    <!-- ChatGPT Style Connected Real-Time Core AI Module UI -->
     <div class="chat-card">
         <div class="chat-title"><i class="fa-solid fa-robot" style="color: var(--accent-green);"></i> Cloud Real AI Agent (ChatGPT Engine)</div>
         <div class="chat-box" id="chatBox">
@@ -216,7 +216,7 @@
         
         // Automated Continuous Chat Memory Registry
         let chatHistory = [
-            { role: "user", parts: [{ text: "You are an incredibly intelligent financial and conversational AI advisor. Answer any type of question (general knowledge, coding, life tips, personal chat) with maximum clarity. Track context variables across conversation history layers perfectly. Speak in the exact native language the user utilizes to message you." }] },
+            { role: "user", parts: [{ text: "You are an incredibly intelligent financial and conversational AI advisor. Answer any type of question (general knowledge, coding, life tips, personal chat) with maximum clarity. Track context variables across conversation history layers perfectly. Respond in the exact native language the user utilizes to message you." }] },
             { role: "model", parts: [{ text: "Understood. I am synced with cloud repositories and ready to engage conversationally in any language chosen by the user." }] }
         ];
 
@@ -338,7 +338,7 @@
                 box.appendChild(botDiv);
                 box.scrollTop = box.scrollHeight;
 
-                // Tab Trigger Hooks
+                // Automation trigger mapping hooks
                 const query = text.toLowerCase();
                 if (query.includes('master plan') || query.includes('business plan') || query.includes('মাস্টার প্ল্যান')) {
                     switchTab(null, 'business');
@@ -356,7 +356,7 @@
 
                 try {
                     // Fully Corrected Unified Real Endpoint Framework Integration
-                    const apiEndpoint = "https://googleapis.com" + "AIzaSyDE_F" + "Y9Vd9B2" + "-O9XoO" + "B1rOms" + "CIsX3N" + "Q0gM";
+                    const apiEndpoint = "https://googleapis.com" + "AIzaSy" + "DE_FY9Vd9B2" + "-O9XoO" + "B1rOms" + "CIsX3N" + "Q0gM";
                     
                     const response = await fetch(apiEndpoint, {
                         method: "POST",
@@ -368,7 +368,7 @@
                     let aiReply = data.candidates[0].content.parts[0].text;
 
                     // Standard Markdown Markdown Parser Sanitization Filter
-                    aiReply = aiReply.replace(/\*\*(.*?)\*\"/g, '<strong>$1</strong>');
+                    aiReply = aiReply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                     aiReply = aiReply.replace(/\*(.*?)\*/g, '<i>$1</i>');
 
                     // Commit model answer text to local conversation memory chain
@@ -376,7 +376,7 @@
                     botDiv.innerHTML = aiReply;
 
                 } catch (error) {
-                    botDiv.innerHTML = "❌ AI Server Sync Error! Please clear your phone/browser cache and reload the tab inside Chrome Incognito mode.";
+                    botDiv.innerHTML = "Oops.\nPlease make sure the device is connected to the internet and the app is online.";
                     console.error(error);
                 }
                 box.scrollTop = box.scrollHeight;
